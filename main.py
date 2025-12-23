@@ -69,7 +69,7 @@ columns_csv = ['username', 'details_page', 'newsletter',
 date_loaded = ' '
 data_food = '-'
 launch_time = ''
-version = '-=fix group update=- 1.2'
+version = '1.3'
 bot = telebot.async_telebot.AsyncTeleBot("")
 
 async def console_log(data, chat_id):
