@@ -70,21 +70,19 @@ date_loaded = ' '
 data_food = '-'
 launch_time = ''
 version = '-=fix group update=- 1.2'
-bot = telebot.async_telebot.AsyncTeleBot("8554783270:AAHM4mEWOR_wfoAZfl_zYfL8li3jdDX1m1Q")
+bot = telebot.async_telebot.AsyncTeleBot("")
 
 async def console_log(data, chat_id):
     log_name = ''
     if (chat_id == ''):
         text = '[' + str(datetime.now().date()) + ', ' + str(datetime.now().time()) + '] ' + str(data)
         log_name = ''
-    elif (type(users_data[chat_id]['username']) != 'NoneType'):
+    elif (str(type(users_data[chat_id]['username'])) != "<class 'NoneType'>"):
         text = '[' + str(datetime.now().date()) + ', ' + str(datetime.now().time()) + '] @' + users_data[chat_id]['username'] + ': ' + str(data)
         log_name = '_@' + users_data[chat_id]['username']
     else:
-        text = '[' + str(datetime.now().date()) + ', ' + str(datetime.now().time()) + '] ID' + chat_id + ': ' + str(data)
-        log_name = '_ID' + chat_id
-
-    print(text)
+        text = '[' + str(datetime.now().date()) + ', ' + str(datetime.now().time()) + '] ID' + str(chat_id) + ': ' + str(data)
+        log_name = '_ID' + str(chat_id)
     with open('logs/' + launch_time + '/' + 'logs' + log_name + '.txt', 'a', encoding='utf-8') as file:
         file.write(text + '\n')
 
@@ -226,7 +224,7 @@ async def data_get():
         data = []
         
         if df is None:
-            console_log('Не могу скачать файл', '')
+            await console_log('Не могу скачать файл', '')
             return data
         df = df.fillna('-')
         for i in range(2, df.shape[0]):
@@ -348,16 +346,20 @@ async def load_food(category, chat_id, message, details):
 
 @bot.message_handler(commands=['food']) 
 async def main(message):
+    print(2)
     await user_add_database(message.chat)
+    print(3)
     if message.chat.type == 'private':
         await bot.delete_message(chat_id=message.chat.id, message_id=message.id)
+    print(4)
     await console_log(str(message.text), message.chat.id)
-
+    print(1)
     food = []
     for index in range(0, 4):
         if (users_data[message.chat.id]['meals'][index]):
             food.append(index)
     await load_food(food, message.chat.id, '-', False)
+    print(4)
 
 @bot.callback_query_handler(func=lambda callback: callback.data == 'details')
 async def main(callback):
